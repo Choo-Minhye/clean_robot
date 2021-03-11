@@ -120,11 +120,13 @@ void path_callback(const nav_msgs::Path &path)
     {
       planned_path.addGoal(path.poses[i].pose.position.x, path.poses[i].pose.position.y, false);
 
-      cout << path.poses[i].pose.position.x << " " << path.poses[i].pose.position.y << endl;
+
+      // cout << path.poses[i].pose.position.x << " " << path.poses[i].pose.position.y << endl;
     }
-    cout << "Recv path size:" << path.poses.size() << endl;
+    // cout << "Recv path size:" << path.poses.size() << endl;
     taille_last_path = path.poses.size();
   }
+
 }
 
 int main(int argc, char *argv[])
@@ -161,7 +163,7 @@ int main(int argc, char *argv[])
       new_path = false;
     }
     //현재 처리 된 포인트
-    cout << " count : " << count << endl;
+    // cout << " count : " << count << endl;
     if (!planned_path.Path.empty())
     {
       //도착
@@ -185,7 +187,7 @@ int main(int argc, char *argv[])
         {
           angle = atan2(planned_path.Path[0].y - planned_path.Path[count].y, planned_path.Path[0].x - planned_path.Path[count].x);
         }
-        cout << angle << endl;
+        // cout << angle << endl;
         quaternion_ros q;
         q.toQuaternion(0, 0, float(angle));
         goal_msgs.pose.orientation.w = q.w;
@@ -200,15 +202,15 @@ int main(int argc, char *argv[])
           goal_msgs.pose.orientation.z = 2;
         }
 
-        cout << " NEW GOAL " << endl;
-        cout << " x = " << planned_path.Path[count].x << " y = " << planned_path.Path[count].y << endl;
+        // cout << " NEW GOAL " << endl;
+        // cout << " x = " << planned_path.Path[count].x << " y = " << planned_path.Path[count].y << endl;
 
         goal_reached = true;
         pub1.publish(goal_msgs);
       }
-      cout << x_current << " " << y_current << endl;
-      cout << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
-      cout << " DISTANCE : " << sqrt((x_current - planned_path.Path[count].x) * (x_current - planned_path.Path[count].x) + (y_current - planned_path.Path[count].y) * (y_current - planned_path.Path[count].y)) << endl;
+      // cout << x_current << " " << y_current << endl;
+      // cout << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
+      // cout << " DISTANCE : " << sqrt((x_current - planned_path.Path[count].x) * (x_current - planned_path.Path[count].x) + (y_current - planned_path.Path[count].y) * (y_current - planned_path.Path[count].y)) << endl;
     }
 
     loop_rate.sleep();
