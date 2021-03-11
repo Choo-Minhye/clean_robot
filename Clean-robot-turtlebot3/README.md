@@ -1,6 +1,6 @@
-
+### 다운로드
 ```bash
-sudo apt install ros-${ROS_DISTRO}-turtlebot3 ros-${ROS_DISTRO}-navigation ros-${ROS_DISTRO}-dwa-local-planner ros-${ROS_DISTRO}-slam-karto
+sudo apt install ros-melodic-turtlebot3 ros-melodic-navigation ros-melodic-dwa-local-planner ros-melodic-slam-karto
 ```
 ### 맵 그리고 동작
 ```bash
