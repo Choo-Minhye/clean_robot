@@ -26,7 +26,6 @@ int main(int argc, char** argv) {
        
     ros::Rate r(1);
     while(ros::ok()){       
-      
       clr.PublishCoveragePath();
       ros::spinOnce();
       r.sleep();

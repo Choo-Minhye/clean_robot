@@ -1,5 +1,5 @@
-
-/*This code is used to plan the trajectory of the robot  
+/*
+This code is used to plan the trajectory of the robot  
 */
 
 #include <ros/ros.h>
@@ -71,7 +71,7 @@ public:
   vector<Goal> Path;
 
   Path_planned();
-  //Path_planned(float x, float y, bool visited);
+  // Path_planned(float x, float y, bool visited);
   void addGoal(float X, float Y, bool visit);
 };
 
@@ -79,7 +79,7 @@ Path_planned::Path_planned()
 {
 }
 
-//Path_planned(float x, float y, bool visited)
+// Path_planned(float x, float y, bool visited)
 
 void Path_planned::addGoal(float X, float Y, bool visit)
 {
@@ -121,9 +121,9 @@ void path_callback(const nav_msgs::Path &path)
       planned_path.addGoal(path.poses[i].pose.position.x, path.poses[i].pose.position.y, false);
 
 
-      // cout << path.poses[i].pose.position.x << " " << path.poses[i].pose.position.y << endl;
+      cout << path.poses[i].pose.position.x << " " << path.poses[i].pose.position.y << endl;
     }
-    // cout << "Recv path size:" << path.poses.size() << endl;
+    cout << "Recv path size:" << path.poses.size() << endl;
     taille_last_path = path.poses.size();
   }
 
@@ -159,18 +159,22 @@ int main(int argc, char *argv[])
     ros::spinOnce();
     if (new_path)
     {
+      // planned_path.Path.clear();
       count = 0;
       new_path = false;
+      goal_reached = false;
+
     }
     //현재 처리 된 포인트
-    // cout << " count : " << count << endl;
+    cout << " count : " << count << endl;
     if (!planned_path.Path.empty())
-    {
+    { 
       //도착
       if (sqrt(pow(x_current - planned_path.Path[count].x, 2) + pow(y_current - planned_path.Path[count].y, 2)) <= normeNextGoal)
       {
         count++;
         goal_reached = false;
+        cout << "arrived" <<endl;
       }
       if (goal_reached == false)
       {
@@ -193,24 +197,45 @@ int main(int argc, char *argv[])
         goal_msgs.pose.orientation.w = q.w;
         goal_msgs.pose.orientation.x = q.x;
         goal_msgs.pose.orientation.y = q.y;
-        if (planned_path.Path[count].x < planned_path.Path[count + 1].x)
-        {
-          goal_msgs.pose.orientation.z = 0;
-        }
-        if (planned_path.Path[count].x > planned_path.Path[count + 1].x)
-        {
-          goal_msgs.pose.orientation.z = 2;
-        }
+        goal_msgs.pose.orientation.z = 0;
 
-        // cout << " NEW GOAL " << endl;
-        // cout << " x = " << planned_path.Path[count].x << " y = " << planned_path.Path[count].y << endl;
+        cout << " NEW GOAL " << endl;
+        cout << " x = " << planned_path.Path[count].x << " y = " << planned_path.Path[count].y << endl;
 
         goal_reached = true;
         pub1.publish(goal_msgs);
+      
       }
-      // cout << x_current << " " << y_current << endl;
-      // cout << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
+      if(count == planned_path.Path.size() && goal_reached == true){
+        count = 0;
+        
+        goal_msgs.pose.position.x = x_current;
+        goal_msgs.pose.position.y = y_current;
+        planned_path.Path.clear();
+
+        pub1.publish(goal_msgs);
+        
+        cout << "reached" << endl;
+        cout << "reached" << endl;
+        cout << "reached" << endl;
+        cout << "reached" << endl;
+
+        // new_path = true;
+        // planned_path.Path.clear();
+        if (planned_path.Path.empty()){
+          cout << "also empty" << endl;
+        }
+      }
+      
+
+
+      cout << x_current << " " << y_current << endl;
+      cout << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
       // cout << " DISTANCE : " << sqrt((x_current - planned_path.Path[count].x) * (x_current - planned_path.Path[count].x) + (y_current - planned_path.Path[count].y) * (y_current - planned_path.Path[count].y)) << endl;
+    }
+
+    else {
+      count = 0;
     }
 
     loop_rate.sleep();
