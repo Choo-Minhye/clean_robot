@@ -214,17 +214,11 @@ int main(int argc, char *argv[])
         planned_path.Path.clear();
 
         pub1.publish(goal_msgs);
-        
-        cout << "reached" << endl;
-        cout << "reached" << endl;
-        cout << "reached" << endl;
-        cout << "reached" << endl;
 
-        // new_path = true;
-        // planned_path.Path.clear();
-        if (planned_path.Path.empty()){
-          cout << "also empty" << endl;
-        }
+        // if (planned_path.Path.empty()){
+        //   cout << "also empty" << endl;
+        // }
+
       }
       
 
