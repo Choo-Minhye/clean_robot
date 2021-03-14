@@ -65,6 +65,8 @@ public:
   {
     float x;
     float y;
+    float w;
+    float z;
     bool visited;
   };
 
@@ -72,7 +74,7 @@ public:
 
   Path_planned();
   // Path_planned(float x, float y, bool visited);
-  void addGoal(float X, float Y, bool visit);
+  void addGoal(float X, float Y, float W, float Z,bool visit);
 };
 
 Path_planned::Path_planned()
@@ -81,11 +83,14 @@ Path_planned::Path_planned()
 
 // Path_planned(float x, float y, bool visited)
 
-void Path_planned::addGoal(float X, float Y, bool visit)
+void Path_planned::addGoal(float X, float Y, float W, float Z, bool visit)
 {
   Path_planned::Goal newGoal;
   newGoal.x = X;
   newGoal.y = Y;
+  newGoal.w = W;
+  newGoal.z = Z;
+
   newGoal.visited = visit;
   Path.push_back(newGoal);
 }
@@ -97,6 +102,7 @@ void pose_callback(const nav_msgs::Odometry &poses)
 { //현재 로봇 위치와 이전 목표 지점 사이의 거리를 계산하고 새 화면 스윙 지점을 보낼지 여부를 결정하는 데 사용되는 주행 콜백 함수
   x_current = poses.pose.pose.position.x;
   y_current = poses.pose.pose.position.y;
+
   passed_path.header = poses.header;
   geometry_msgs::PoseStamped p;
   p.header = poses.header;
@@ -118,7 +124,7 @@ void path_callback(const nav_msgs::Path &path)
     new_path = true;
     for (int i = 0; i < path.poses.size(); i++)
     {
-      planned_path.addGoal(path.poses[i].pose.position.x, path.poses[i].pose.position.y, false);
+      planned_path.addGoal(path.poses[i].pose.position.x, path.poses[i].pose.position.y, path.poses[i].pose.orientation.w, path.poses[i].pose.orientation.z, false);
 
 
       cout << path.poses[i].pose.position.x << " " << path.poses[i].pose.position.y << endl;
@@ -191,13 +197,13 @@ int main(int argc, char *argv[])
         {
           angle = atan2(planned_path.Path[0].y - planned_path.Path[count].y, planned_path.Path[0].x - planned_path.Path[count].x);
         }
-        // cout << angle << endl;
+        cout<< "angle : "  << angle << endl;
         quaternion_ros q;
         q.toQuaternion(0, 0, float(angle));
-        goal_msgs.pose.orientation.w = q.w;
+        goal_msgs.pose.orientation.w = planned_path.Path[count].w;
         goal_msgs.pose.orientation.x = q.x;
         goal_msgs.pose.orientation.y = q.y;
-        goal_msgs.pose.orientation.z = 0;
+        goal_msgs.pose.orientation.z = planned_path.Path[count].z;
 
         cout << " NEW GOAL " << endl;
         cout << " x = " << planned_path.Path[count].x << " y = " << planned_path.Path[count].y << endl;
