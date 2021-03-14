@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
       }
       if (goal_reached == false)
       {
-        goal_msgs.header.frame_id = "odom";
+        goal_msgs.header.frame_id = "map";
         goal_msgs.header.stamp = ros::Time::now();
         goal_msgs.pose.position.x = planned_path.Path[count].x;
         goal_msgs.pose.position.y = planned_path.Path[count].y;
