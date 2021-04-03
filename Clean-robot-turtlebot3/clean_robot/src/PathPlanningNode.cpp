@@ -13,27 +13,27 @@ using cm::Costmap2DROS;
 
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "path_planning_node");//hjr
+  ros::init(argc, argv, "path_planning_node");//hjr
 
-    tf2_ros::Buffer tf;
-    tf2_ros::TransformListener tf2_listener(tf);
-    costmap_2d::Costmap2DROS lcr("cleaning_costmap", tf);
-    //planner_costmap_ros_->pause();
+  tf2_ros::Buffer tf;
+  tf2_ros::TransformListener tf2_listener(tf);
+  costmap_2d::Costmap2DROS lcr("cleaning_costmap", tf);
+  //planner_costmap_ros_->pause();
 
-    ros::Duration(5).sleep();
-    CleaningPathPlanning clr(&lcr);
-    clr.GetPathInROS();
+  ros::Duration(5).sleep();
+  CleaningPathPlanning clr(&lcr);
+  clr.GetPathInROS();
        
-    ros::Rate r(1);
-    while(ros::ok()){       
-      
-      clr.PublishCoveragePath();
-      ros::spinOnce();
-      r.sleep();
-    }
+  ros::Rate r(1);
+  while(ros::ok()){       
+    
+    clr.PublishCoveragePath();
+    ros::spinOnce();
+    r.sleep();
+  }
 
-    ros::shutdown();//关闭节点以及所有与之相关的发布，订阅，调用与服务。
-    return 0;
+  ros::shutdown();//关闭节点以及所有与之相关的发布，订阅，调用与服务。
+  return 0;
 }
 
 // clr.GetBorderTrackingPathInROS();
