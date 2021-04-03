@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 /*This code is used to plan the trajectory of the robot  
+=======
+/*
+This code is used to plan the trajectory of the robot  
+>>>>>>> af06db4dd204d904754ddd1c8db861bea3f96d00
 */
 
 #include <ros/ros.h>
@@ -103,6 +108,7 @@ void pose_callback(const geometry_msgs::PoseWithCovarianceStamped &poses)
 { //현재 로봇 위치와 이전 목표 지점 사이의 거리를 계산하고 새 화면 스윙 지점을 보낼지 여부를 결정하는 데 사용되는 주행 콜백 함수
   x_current = poses.pose.pose.position.x;
   y_current = poses.pose.pose.position.y;
+
   passed_path.header = poses.header;
   geometry_msgs::PoseStamped p;
   p.header = poses.header;
@@ -173,7 +179,7 @@ int main(int argc, char *argv[])
 
     }
     //현재 처리 된 포인트
-    // cout << " count : " << count << endl;
+    cout << " count : " << count << endl;
     if (!planned_path.Path.empty())
     { 
       //도착
@@ -212,6 +218,7 @@ int main(int argc, char *argv[])
         goal_reached = true;
         pub1.publish(goal_msgs);
       
+<<<<<<< HEAD
       }
       if(count == planned_path.Path.size() && goal_reached == true){
         count = 0;
@@ -232,6 +239,28 @@ int main(int argc, char *argv[])
 
       // cout << "current : " <<  x_current << " " << y_current << endl;
       // cout << "planned : " << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
+=======
+      }
+      if(count == planned_path.Path.size() && goal_reached == true){
+        count = 0;
+        
+        goal_msgs.pose.position.x = x_current;
+        goal_msgs.pose.position.y = y_current;
+        planned_path.Path.clear();
+
+        pub1.publish(goal_msgs);
+
+        // if (planned_path.Path.empty()){
+        //   cout << "also empty" << endl;
+        // }
+
+      }
+      
+
+
+      cout << x_current << " " << y_current << endl;
+      cout << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
+>>>>>>> af06db4dd204d904754ddd1c8db861bea3f96d00
       // cout << " DISTANCE : " << sqrt((x_current - planned_path.Path[count].x) * (x_current - planned_path.Path[count].x) + (y_current - planned_path.Path[count].y) * (y_current - planned_path.Path[count].y)) << endl;
     }
 

@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
   CleaningPathPlanning clr(&lcr);
   clr.GetPathInROS();
        
+<<<<<<< HEAD
   ros::Rate r(1);
   while(ros::ok()){       
     
@@ -34,6 +35,17 @@ int main(int argc, char** argv) {
 
   ros::shutdown();//关闭节点以及所有与之相关的发布，订阅，调用与服务。
   return 0;
+=======
+    ros::Rate r(1);
+    while(ros::ok()){       
+      clr.PublishCoveragePath();
+      ros::spinOnce();
+      r.sleep();
+    }
+
+    ros::shutdown();//关闭节点以及所有与之相关的发布，订阅，调用与服务。
+    return 0;
+>>>>>>> af06db4dd204d904754ddd1c8db861bea3f96d00
 }
 
 // clr.GetBorderTrackingPathInROS();
