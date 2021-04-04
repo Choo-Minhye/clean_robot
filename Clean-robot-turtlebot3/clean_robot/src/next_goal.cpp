@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 /*This code is used to plan the trajectory of the robot  
-=======
-/*
-This code is used to plan the trajectory of the robot  
->>>>>>> af06db4dd204d904754ddd1c8db861bea3f96d00
 */
 
 #include <ros/ros.h>
@@ -14,6 +9,7 @@ This code is used to plan the trajectory of the robot
 #include "nav_msgs/Path.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
+#include "std_msgs/Int32.h"
 #include <tf/transform_listener.h>
 #include <iostream>
 #include <fstream>
@@ -104,6 +100,9 @@ void Path_planned::addGoal(float X, float Y, float W, float Z, bool visit)
 Path_planned planned_path;
 nav_msgs::Path passed_path;
 ros::Publisher pub_passed_path;
+std_msgs::Int32 path_count;
+ros::Publisher pub_count;
+
 void pose_callback(const geometry_msgs::PoseWithCovarianceStamped &poses)
 { //현재 로봇 위치와 이전 목표 지점 사이의 거리를 계산하고 새 화면 스윙 지점을 보낼지 여부를 결정하는 데 사용되는 주행 콜백 함수
   x_current = poses.pose.pose.position.x;
@@ -151,6 +150,7 @@ int main(int argc, char *argv[])
 
   ros::Publisher pub1 = next_goal.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 1000);
   pub_passed_path = next_goal.advertise<nav_msgs::Path>("/clean_robot/passed_path", 1000);
+  pub_count = next_goal.advertise<std_msgs::Int32>("path_count",1000);
 
   ros::Rate loop_rate(10);
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 
     }
     //현재 처리 된 포인트
-    cout << " count : " << count << endl;
+    // cout << " count : " << count << endl;
     if (!planned_path.Path.empty())
     { 
       //도착
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
         {
           angle = atan2(planned_path.Path[0].y - planned_path.Path[count].y, planned_path.Path[0].x - planned_path.Path[count].x);
         }
-        cout<< "angle : "  << angle << endl;
+        // cout<< "angle : "  << angle << endl;
         quaternion_ros q;
         q.toQuaternion(0, 0, float(angle));
         goal_msgs.pose.orientation.w = planned_path.Path[count].w;
@@ -212,55 +212,35 @@ int main(int argc, char *argv[])
         goal_msgs.pose.orientation.y = q.y;
         goal_msgs.pose.orientation.z = planned_path.Path[count].z;
 
-        cout << " NEW GOAL " << endl;
-        cout << " x = " << planned_path.Path[count].x << " y = " << planned_path.Path[count].y << endl;
+        // cout << " NEW GOAL " << endl;
+        // cout << " x = " << planned_path.Path[count].x << " y = " << planned_path.Path[count].y << endl;
 
         goal_reached = true;
         pub1.publish(goal_msgs);
+        path_count.data = count;
       
-<<<<<<< HEAD
       }
       if(count == planned_path.Path.size() && goal_reached == true){
-        count = 0;
-        
         goal_msgs.pose.position.x = x_current;
         goal_msgs.pose.position.y = y_current;
+        goal_msgs.pose.orientation.w = planned_path.Path[count-1].w;
+        goal_msgs.pose.orientation.x = 0;
+        goal_msgs.pose.orientation.y = 0;
+        goal_msgs.pose.orientation.z = planned_path.Path[count-1].z;
+        cout << "z : " << planned_path.Path[count-1].z << endl;
+        cout << "w : " << planned_path.Path[count-1].w << endl;
+        cout << count << endl;
+        path_count.data = count;
+        count = 0;
+        
         planned_path.Path.clear();
 
         pub1.publish(goal_msgs);
-
-        // if (planned_path.Path.empty()){
-        //   cout << "also empty" << endl;
-        // }
-
       }
-      
-
+      pub_count.publish(path_count);
 
       // cout << "current : " <<  x_current << " " << y_current << endl;
       // cout << "planned : " << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
-=======
-      }
-      if(count == planned_path.Path.size() && goal_reached == true){
-        count = 0;
-        
-        goal_msgs.pose.position.x = x_current;
-        goal_msgs.pose.position.y = y_current;
-        planned_path.Path.clear();
-
-        pub1.publish(goal_msgs);
-
-        // if (planned_path.Path.empty()){
-        //   cout << "also empty" << endl;
-        // }
-
-      }
-      
-
-
-      cout << x_current << " " << y_current << endl;
-      cout << planned_path.Path[count].x << " " << planned_path.Path[count].y << endl;
->>>>>>> af06db4dd204d904754ddd1c8db861bea3f96d00
       // cout << " DISTANCE : " << sqrt((x_current - planned_path.Path[count].x) * (x_current - planned_path.Path[count].x) + (y_current - planned_path.Path[count].y) * (y_current - planned_path.Path[count].y)) << endl;
     }
 

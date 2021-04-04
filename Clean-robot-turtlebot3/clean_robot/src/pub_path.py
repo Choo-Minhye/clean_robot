@@ -20,7 +20,6 @@ def publisher():
     path.poses.append(_pose_stamp(0.0, 0.0, 0))
     path.poses.append(_pose_stamp(7.5, 0.0, 90))
     # path.poses.append(_pose_stamp(7.5, 2.0, -1.5708))
-<<<<<<< HEAD
     # path.poses.append(_pose_stamp(7.5, 5.0, 90))
     # path.poses.append(_pose_stamp(7.5, 9.0, 70))
     # path.poses.append(_pose_stamp(8.0, 11.0, 45))
@@ -41,27 +40,6 @@ def publisher():
     path.poses.append(_pose_stamp(8.0, -10.0, 90))
     # path.poses.append(_pose_stamp(8.0, -7.0, 90))
     # path.poses.append(_pose_stamp(8.0, -4.5, 90))
-=======
-    path.poses.append(_pose_stamp(7.5, 5.0, 90))
-    path.poses.append(_pose_stamp(7.5, 9.0, 70))
-    path.poses.append(_pose_stamp(8.0, 11.0, 45))
-    path.poses.append(_pose_stamp(10.0, 12.0, 120))
-    path.poses.append(_pose_stamp(9.0, 13.0, 225))
-    path.poses.append(_pose_stamp(7.5, 10.0, 270))    # path.poses.append(_pose_stamp(7.5, 10.0, -4.71239))
-    path.poses.append(_pose_stamp(7.5, 5.0, 270))
-    path.poses.append(_pose_stamp(7.5, 0.0, 285))
-    path.poses.append(_pose_stamp(8.0, -4.5, 270))
-    path.poses.append(_pose_stamp(8.0, -7.0, 270))
-    path.poses.append(_pose_stamp(8.0, -10.0, 345))
-    path.poses.append(_pose_stamp(11.5, -11.0, 90))
-    path.poses.append(_pose_stamp(11.5, -10.2, 90))
-    
-    ###### EV turn ######
-    path.poses.append(_pose_stamp(11.5, -10.2, 180))
-    path.poses.append(_pose_stamp(8.0, -10.0, 90))
-    path.poses.append(_pose_stamp(8.0, -7.0, 90))
-    path.poses.append(_pose_stamp(8.0, -4.5, 90))
->>>>>>> af06db4dd204d904754ddd1c8db861bea3f96d00
     path.poses.append(_pose_stamp(7.5, 0.0, 180))
     path.poses.append(_pose_stamp(0.0, 0.0, 0))
 ##
